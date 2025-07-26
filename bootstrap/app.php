@@ -12,6 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
+        // تسجيل alias للميدلوير
+        $middleware->alias([
+            'celebrity.auth' => \App\Http\Middleware\RedirectIfNotCelebrity::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\CouponsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CelebrityAuthController;
 
@@ -31,9 +32,15 @@ Route::prefix('celebrity')->name('celebrity.')->group(function () {
 
 
 });
-Route::middleware('auth:celebrity')->prefix('celebrity')->name('celebrity.')->group(function () {
+Route::middleware('celebrity.auth')->prefix('celebrity')->name('celebrity.')->group(function () {
     Route::get('dashboard', [MainController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [MainController::class, 'profile'])->name('profile');
+    Route::get('edit-profile', [MainController::class, 'edit_profile'])->name('edit-profile');
+    Route::post('save-profile/{id}', [MainController::class, 'save_profile'])->name('save-profile');
+
+
+    Route::get('coupons', [CouponsController::class, 'index'])->name('coupons.index');
+    Route::get('get-coupons', [CouponsController::class, 'get_coupons'])->name('get-coupons');
 });
 
 

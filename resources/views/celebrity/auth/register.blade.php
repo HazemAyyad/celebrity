@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.rtl.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/swiper-bundle.min.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/media.css') }}" />
@@ -80,7 +82,16 @@
 
                     <div class="col-md-6">
                         <label class="form-label">الدولة</label>
-                        <input type="text" name="country" class="form-control">
+                        <select class="form-select select2"  name="country_id" id="country_id">
+                            <option value="" >اختر الدولة </option>
+                            @foreach($countries as $country)
+                                <option value="{{$country->id}}" >
+                                    {{$country->country_name .'-'.$country->city_name}}
+                                </option>
+
+                            @endforeach
+
+                        </select>
                     </div>
 
                     <div class="col-md-6">
@@ -149,6 +160,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <!-- معاينة الصورة -->
 <script>
