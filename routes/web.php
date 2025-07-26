@@ -38,6 +38,7 @@ Route::middleware('celebrity.auth')->prefix('celebrity')->name('celebrity.')->gr
     Route::get('edit-profile', [MainController::class, 'edit_profile'])->name('edit-profile');
     Route::post('save-profile/{id}', [MainController::class, 'save_profile'])->name('save-profile');
 
+    Route::get('my-quotation', [MainController::class, 'myQuotation'])->name('my-quotation');
 
     Route::get('coupons', [CouponsController::class, 'index'])->name('coupons.index');
     Route::get('get-coupons', [CouponsController::class, 'get_coupons'])->name('get-coupons');

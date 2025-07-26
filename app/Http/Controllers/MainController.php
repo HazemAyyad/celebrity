@@ -21,6 +21,12 @@ class MainController extends Controller
 
         return view('celebrity.index');
     }
+    public function myQuotation()
+    {
+
+
+        return view('celebrity.my-quotation');
+    }
     public function profile()
     {
 
