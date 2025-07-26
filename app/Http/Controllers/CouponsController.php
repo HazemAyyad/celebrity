@@ -20,13 +20,14 @@ class CouponsController extends Controller
     public function index()
     {
 
+        $coupons = Coupon::query()->with('celebrity')->get(); // eager load لعلاقة celebrity
 
-        return view('celebrity.coupons.index');
+        return view('celebrity.coupons.index', compact('coupons'));
     }
 
     public function get_coupons(Request $request)
     {
-        $coupons = Coupon::with('celebrity'); // eager load لعلاقة celebrity
+      return  $coupons = Coupon::with('celebrity'); // eager load لعلاقة celebrity
 
         return DataTables::of($coupons)
             ->addIndexColumn()
@@ -45,7 +46,7 @@ class CouponsController extends Controller
 
             // ✅ Active status buttons
             ->editColumn('active', function ($item) {
-                $url = route('dashboard.coupons.toggle-active', $item->id);
+                $url = '';
                 return $item->active
                     ? '<button type="button" url="' . $url . '" class="btn btn-sm btn-danger btn-put"><i class="fa fa-x"></i></button>'
                     : '<button type="button" url="' . $url . '" class="btn btn-sm btn-success btn-put"><i class="fa fa-check"></i></button>';

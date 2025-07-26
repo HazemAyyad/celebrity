@@ -29,10 +29,15 @@
                    style="width:100%">
                 <thead>
                 <tr>
-                    <th>الرقم</th>
+                    <th>#</th>
                     <th>الاسم</th>
+                     <th>وصف</th>
+                     <th>الكود</th>
                     <th>قيمة الكوبون</th>
-                    <th>وصف</th>
+                    <th>النوع</th>
+                    <th>قيمة الفنادق</th>
+                    <th>قيمة الطيران</th>
+                    <th>قيمة الباقات</th>
                     <th>الحالة</th>
                     <th>تاريخ الإضافة</th>
                     <th>تاريخ الانتهاء</th>
@@ -40,96 +45,28 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-hali">حالي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-multghi">ملغي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-montahi">منتهي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-hali">حالي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-multghi">ملغي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-montahi">منتهي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-hali">حالي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-multghi">ملغي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
-                <tr>
-                    <td>15975</td>
-                    <td>كورون أحمد</td>
-                    <td>خصم %50 على رحلات الطيران</td>
-                    <td>هنا توضع نص افتراضي</td>
-                    <td><span class="badge-status badge-montahi">منتهي</span></td>
-                    <td>20-05-2021</td>
-                    <td>20-05-2021</td>
-                    <td>5 أيام</td>
-                </tr>
+                @foreach($coupons as $coupon)
+                    <tr>
+                        <td># {{$coupon->id}}</td>
+                        <td>{{$coupon->name??'-'}}</td>
+                        <td>{{$coupon->descriptoion??'-'}}</td>
+                        <td>{{$coupon->code}}</td>
+                        <td>{{$coupon->value}}</td>
+                        <td>{{ $coupon->type == 'percentage' ? 'نسبة مئوية' : 'مبلغ ثابت' }}</td>
+                        <td>{{ $coupon->getDiscountLabel(\App\Enums\Couponable::Hotels) }}</td>
+                        <td>{{ $coupon->getDiscountLabel(\App\Enums\Couponable::Flights) }}</td>
+                        <td>{{ $coupon->getDiscountLabel(\App\Enums\Couponable::Packages) }}</td>
+                        <td>
+                            <span class="badge-status badge-{{$coupon->active==1?'montahi':'multghi'}}">{{$coupon->active==1?'فعال':'غير فعال'}}</span>
+                        </td>
+                        <td>{{ optional($coupon->created_at)->format('Y-m-d') }}</td>
+                        <td>{{ optional($coupon->end_date)->format('Y-m-d') ?? '—' }}</td>
+
+                        <td>{{ $coupon->remaining_time }}</td>
+                    </tr>
+                @endforeach
+
+
                 </tbody>
             </table>
         </div>
@@ -144,41 +81,26 @@
 
     <script>
         $(document).ready(function () {
-            $(document).ready(function () {
-                $('#couponsTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: '{{ route("celebrity.get-coupons") }}',
-                    columns: [
-                        { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-                        { data: 'name', name: 'name' },
-                        { data: 'value', name: 'value' },
-                        { data: 'description', name: 'description' },
-                        { data: 'status', name: 'status' },
-                        { data: 'created_at', name: 'created_at' },
-                        { data: 'expire_at', name: 'expire_at' },
-                        { data: 'remaining_days', name: 'remaining_days', orderable: false, searchable: false }
-                    ],
-                    language: {
-                        search: "بحث:",
-                        paginate: {
-                            first: "الأول",
-                            last: "الأخير",
-                            next: "التالي",
-                            previous: "السابق"
-                        },
-                        lengthMenu: "عرض _MENU_ سجلات",
-                        info: "عرض _START_ إلى _END_ من أصل _TOTAL_ سجل",
-                        infoEmpty: "لا توجد سجلات",
-                        zeroRecords: "لم يتم العثور على نتائج",
-                        emptyTable: "لا توجد بيانات متاحة في الجدول",
+            $('#couponsTable').DataTable({
+                language: {
+                    search: "بحث:",
+                    paginate: {
+                        first: "الأول",
+                        last: "الأخير",
+                        next: "التالي",
+                        previous: "السابق"
                     },
-                    pagingType: "full_numbers",
-                    lengthChange: false,
-                    scrollX: true
-                });
+                    lengthMenu: "عرض _MENU_ سجلات",
+                    info: "عرض _START_ إلى _END_ من أصل _TOTAL_ سجل",
+                    infoEmpty: "لا توجد سجلات",
+                    zeroRecords: "لم يتم العثور على نتائج",
+                    emptyTable: "لا توجد بيانات متاحة في الجدول",
+                },
+                pagingType: "full_numbers",
+                info: false,
+                lengthChange: false,
+                scrollX: true,
             });
-
         });
     </script>
 @endpush

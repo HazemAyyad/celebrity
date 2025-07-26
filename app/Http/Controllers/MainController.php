@@ -17,26 +17,24 @@ class MainController extends Controller
 
     public function dashboard()
     {
-        $celebrity = auth('celebrity')->user();
 
 
-        return view('celebrity.index', compact('celebrity'));
+        return view('celebrity.index');
     }
     public function profile()
     {
-        $celebrity = auth('celebrity')->user();
+
         $countries=Country::all();
 
 
-        return view('celebrity.profile', compact('celebrity','countries'));
+        return view('celebrity.profile', compact('countries'));
     }
     public function edit_profile()
     {
-        $celebrity = auth('celebrity')->user();
-        $countries=Country::all();
+         $countries=Country::all();
 
 
-        return view('celebrity.edit-profile', compact('celebrity','countries'));
+        return view('celebrity.edit-profile', compact('countries'));
     }
     public function save_profile(Request $request, $id)
     {
