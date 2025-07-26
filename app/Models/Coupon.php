@@ -44,12 +44,12 @@ class Coupon extends Model
     }
     public function getRemainingTimeAttribute(): string
     {
-        if (!$this->end_date) {
+        if (!$this->expires_at) {
             return 'بدون تاريخ انتهاء';
         }
 
         $now = Carbon::now();
-        $expiresAt = Carbon::parse($this->end_date);
+        $expiresAt = Carbon::parse($this->expires_at);
 
         if ($expiresAt->isPast()) {
             return 'منتهي';
@@ -66,5 +66,8 @@ class Coupon extends Model
     {
         return $this->belongsTo(Celebrity::class,'celebrity_id');
     }
-
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'created_at' => 'datetime',
+    ];
 }

@@ -60,7 +60,7 @@
                             <span class="badge-status badge-{{$coupon->active==1?'montahi':'multghi'}}">{{$coupon->active==1?'فعال':'غير فعال'}}</span>
                         </td>
                         <td>{{ optional($coupon->created_at)->format('Y-m-d') }}</td>
-                        <td>{{ optional($coupon->end_date)->format('Y-m-d') ?? '—' }}</td>
+                        <td>{{ optional($coupon->expires_at)->format('Y-m-d')   }}</td>
 
                         <td>{{ $coupon->remaining_time }}</td>
                     </tr>
