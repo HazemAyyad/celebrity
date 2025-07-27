@@ -72,7 +72,7 @@
                 <div id="otpMessage" class="mt-3 text-center"></div>
                 <form   method="POST" style="display: inline;">
                     @csrf
-                    <input type="hidden" name="celebrity_id" value="{{ $celebrity->id }}">
+                    <input type="hidden" name="celebrity_id" value="{{ request('user') }}">
                     <input type="hidden" name="type" value="email"> {{-- أو "phone" حسب السياق --}}
                     <button type="button" id="resendOtpBtn" class="btn btn-link">إعادة إرسال رمز التحقق</button>
                 </form>
