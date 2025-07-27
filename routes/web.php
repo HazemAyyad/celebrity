@@ -4,7 +4,10 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\CouponsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CelebrityAuthController;
-
+Route::get('/create-storage-link', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    return 'Storage link created successfully!';
+});
 Route::prefix('celebrity')->name('celebrity.')->group(function () {
     Route::get('login', [CelebrityAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [CelebrityAuthController::class, 'login']);
