@@ -207,6 +207,8 @@
         $('#country_id').select2({
             placeholder: "اختر الدولة",
             allowClear: true,
+            theme: "bootstrap-5",
+
             dir: "rtl", // لأن الصفحة بالعربية
             width: '100%' // ليأخذ عرض العنصر بالكامل
         });
