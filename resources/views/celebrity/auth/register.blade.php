@@ -177,6 +177,13 @@
     }
 </script>
 <script>
+    $('#country_id').select2({
+        placeholder: "اختر الدولة",
+        allowClear: true,
+        dir: "rtl", // لأن الصفحة بالعربية
+        width: '100%' // ليأخذ عرض العنصر بالكامل
+    });
+
     $(document).ready(function () {
         // تفعيل الفاليديشن
         $("form").validate({
