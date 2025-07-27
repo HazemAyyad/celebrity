@@ -8,13 +8,17 @@ Route::get('/create-storage-link', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
-Route::get('/manual-storage-copy', function () {
-    $source = storage_path('app/public');
-    $destination = public_path('storage');
+Route::get('/link-storage', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
 
-    \Illuminate\Support\Facades\File::copyDirectory($source, $destination);
+    if (file_exists($link)) {
+        return '🔁 Already linked.';
+    }
 
-    return 'Files copied from storage/app/public to public/storage';
+    symlink($target, $link);
+
+    return '✅ The [public/storage] directory has been linked.';
 });
 
 Route::prefix('celebrity')->name('celebrity.')->group(function () {
