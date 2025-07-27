@@ -4,10 +4,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\CouponsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CelebrityAuthController;
-Route::get('/create-storage-link', function () {
-    \Illuminate\Support\Facades\Artisan::call('storage:link');
-    return 'Storage link created successfully!';
-});
+
 Route::get('/link-storage', function () {
     $target = storage_path('app/public');
     $link = public_path('storage');

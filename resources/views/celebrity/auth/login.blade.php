@@ -40,20 +40,20 @@
             <h6 class="head-6 mb-4">الذهبية العالمية للسياحة و السفر</h6>
 
             <!-- أزرار السوشال ميديا -->
-            <a href="#" class="btn border-gray social-btn">
-                <img src="{{ asset('assets/images/google.png') }}" class="mx-2" alt="Google" />
-                التسجيل بواسطة جوجل
-            </a>
-            <a href="#" class="btn border-gray social-btn">
-                <img src="{{ asset('assets/images/facebook.png') }}" class="mx-2" alt="Facebook" />
-                التسجيل بواسطة فيسبوك
-            </a>
+{{--            <a href="#" class="btn border-gray social-btn">--}}
+{{--                <img src="{{ asset('assets/images/google.png') }}" class="mx-2" alt="Google" />--}}
+{{--                التسجيل بواسطة جوجل--}}
+{{--            </a>--}}
+{{--            <a href="#" class="btn border-gray social-btn">--}}
+{{--                <img src="{{ asset('assets/images/facebook.png') }}" class="mx-2" alt="Facebook" />--}}
+{{--                التسجيل بواسطة فيسبوك--}}
+{{--            </a>--}}
 
-            <div class="d-flex align-items-center text-muted my-1">
-                <hr class="flex-grow-1 border-top border-secondary" />
-                <span class="px-3">أو</span>
-                <hr class="flex-grow-1 border-top border-secondary" />
-            </div>
+{{--            <div class="d-flex align-items-center text-muted my-1">--}}
+{{--                <hr class="flex-grow-1 border-top border-secondary" />--}}
+{{--                <span class="px-3">أو</span>--}}
+{{--                <hr class="flex-grow-1 border-top border-secondary" />--}}
+{{--            </div>--}}
 
             <!-- الفورم -->
             <form id="loginForm" method="POST">
