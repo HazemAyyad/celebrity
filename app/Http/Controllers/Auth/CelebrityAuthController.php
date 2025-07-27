@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ResetOtpMail;
 use App\Models\Celebrity;
 use App\Models\CelebrityOtp;
+use App\Models\Country;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -66,7 +67,8 @@ class CelebrityAuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('celebrity.auth.register');
+        $countries=Country::all();
+        return view('celebrity.auth.register',compact('countries'));
     }
 
     // معالجة التسجيل
