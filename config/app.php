@@ -14,7 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'asset_url' => env('APP_ASSET_URL', null),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
