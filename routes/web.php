@@ -8,6 +8,15 @@ Route::get('/create-storage-link', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     return 'Storage link created successfully!';
 });
+Route::get('/manual-storage-copy', function () {
+    $source = storage_path('app/public');
+    $destination = public_path('storage');
+
+    \Illuminate\Support\Facades\File::copyDirectory($source, $destination);
+
+    return 'Files copied from storage/app/public to public/storage';
+});
+
 Route::prefix('celebrity')->name('celebrity.')->group(function () {
     Route::get('login', [CelebrityAuthController::class, 'showLoginForm'])->name('login');
     Route::post('login', [CelebrityAuthController::class, 'login']);
