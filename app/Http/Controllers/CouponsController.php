@@ -7,6 +7,7 @@ use App\Models\Celebrity;
 use App\Models\Country;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +21,7 @@ class CouponsController extends Controller
     public function index()
     {
 
-        $coupons = Coupon::query()->with('celebrity')->get(); // eager load لعلاقة celebrity
+        $coupons = Coupon::query()->where('celebrity_id',Auth::id())->with('celebrity')->get(); // eager load لعلاقة celebrity
 
         return view('celebrity.coupons.index', compact('coupons'));
     }
