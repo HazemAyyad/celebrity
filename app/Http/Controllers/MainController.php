@@ -124,7 +124,8 @@ class MainController extends Controller
     }
     public function edit_profile()
     {
-         $countries=Country::all();
+        $countries=Country::query()->where('country_name','Saudi Arabia')->get();
+
 
 
         return view('celebrity.edit-profile', compact('countries'));
