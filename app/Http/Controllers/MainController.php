@@ -88,10 +88,12 @@ class MainController extends Controller
             $labels[] = $date->translatedFormat('F'); // اسم الشهر مثل "مارس"
 
             $hotelsData[] = DB::table('booking_hotels')
+                ->whereIn('coupon_code', $userCouponCodes)
                 ->whereBetween('created_at', [$start, $end])
                 ->count();
 
             $flightsData[] = DB::table('fs_bookings')
+                ->whereIn('coupon_code', $userCouponCodes)
                 ->whereBetween('created_at', [$start, $end])
                 ->count();
 
