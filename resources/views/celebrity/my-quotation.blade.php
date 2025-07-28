@@ -19,7 +19,7 @@
         <div class="container bg-white p-4 rounded shadow-sm my-3">
             <section class="container py-5">
                 <div class="ratio ratio-16x9 border">
-                    <iframe src="{{ $celebrity->my_quotation ? asset('storage/' . $celebrity->my_quotation) : asset('assets/images/hotel-quotation-5000.pdf') }}" allowfullscreen></iframe>
+                    <iframe src="{{ $celebrity->my_quotation ? asset('https://gita.sa/storage/' . $celebrity->my_quotation) : asset('assets/images/hotel-quotation-5000.pdf') }}" allowfullscreen></iframe>
                 </div>
             </section>
         </div>
