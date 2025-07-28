@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Celebrity;
 use App\Models\Country;
+use App\Models\Coupon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -15,12 +17,68 @@ use Illuminate\Support\Facades\Validator;
 class MainController extends Controller
 {
 
+
     public function dashboard()
     {
+        $userId = auth('celebrity')->id();
+        $userCouponCodes = Coupon::where('celebrity_id', $userId)->pluck('code');
 
+        // التواريخ
+        $startOfThisMonth = Carbon::now()->startOfMonth();
+        $endOfThisMonth = Carbon::now()->endOfMonth();
+        $startOfLastMonth = Carbon::now()->subMonth()->startOfMonth();
+        $endOfLastMonth = Carbon::now()->subMonth()->endOfMonth();
 
-        return view('celebrity.index');
+        // الفنادق
+        $hotelTotalThisMonth = DB::table('booking_hotels')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->whereBetween('created_at', [$startOfThisMonth, $endOfThisMonth])
+            ->sum('amount');
+
+        $hotelTotalLastMonth = DB::table('booking_hotels')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+            ->sum('amount');
+
+        $hotelTotalAllTime = DB::table('booking_hotels')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->sum('amount');
+
+        $hotelGrowth = 0;
+        if ($hotelTotalLastMonth > 0) {
+            $hotelGrowth = (($hotelTotalThisMonth - $hotelTotalLastMonth) / $hotelTotalLastMonth) * 100;
+        } elseif ($hotelTotalThisMonth > 0) {
+            $hotelGrowth = 100;
+        }
+
+        // الطيران
+        $flightTotalThisMonth = DB::table('fs_bookings')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->whereBetween('created_at', [$startOfThisMonth, $endOfThisMonth])
+            ->sum('price');
+
+        $flightTotalLastMonth = DB::table('fs_bookings')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+            ->sum('price');
+
+        $flightTotalAllTime = DB::table('fs_bookings')
+            ->whereIn('coupon_code', $userCouponCodes)
+            ->sum('price');
+
+        $flightGrowth = 0;
+        if ($flightTotalLastMonth > 0) {
+            $flightGrowth = (($flightTotalThisMonth - $flightTotalLastMonth) / $flightTotalLastMonth) * 100;
+        } elseif ($flightTotalThisMonth > 0) {
+            $flightGrowth = 100;
+        }
+
+        return view('celebrity.index', compact(
+            'hotelTotalThisMonth', 'hotelTotalLastMonth', 'hotelTotalAllTime', 'hotelGrowth',
+            'flightTotalThisMonth', 'flightTotalLastMonth', 'flightTotalAllTime', 'flightGrowth'
+        ));
     }
+
     public function myQuotation()
     {
 

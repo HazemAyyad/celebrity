@@ -21,7 +21,10 @@ class CouponsController extends Controller
     public function index()
     {
 
-        $coupons = Coupon::query()->where('celebrity_id',Auth::id())->with('celebrity')->get(); // eager load لعلاقة celebrity
+        $coupons = Coupon::query()
+            ->where('celebrity_id', auth('celebrity')->id())
+            ->with('celebrity') // eager load
+            ->get();
 
         return view('celebrity.coupons.index', compact('coupons'));
     }

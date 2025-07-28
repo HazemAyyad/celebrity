@@ -67,7 +67,7 @@ class CelebrityAuthController extends Controller
 
     public function showRegisterForm()
     {
-        $countries=Country::all();
+        $countries=Country::query()->where('country_name','Saudi Arabia')->get();
         return view('celebrity.auth.register',compact('countries'));
     }
 

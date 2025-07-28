@@ -20,150 +20,51 @@
         </div>
 
         <div class="row">
+
+            {{-- بطاقة حجوزات الطيران --}}
             <div class="col-md-3 col-6 my-4">
                 <div class="stats-card">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
+                            <span class="growth-icon">
+                                <i class="fa-solid {{ $flightGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
+                            </span>
+                            <span class="percentage">{{ number_format($flightGrowth, 1) }}%</span>
                         </div>
                         <div class="dots">•••</div>
-
                     </div>
                     <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
+                        <h6 class="mb-2">حجوزات الطيران</h6>
+                        <div class="amount">+ {{ number_format($flightTotalAllTime) }} رس</div>
+                        <small class="text-muted d-block">هذا الشهر: {{ number_format($flightTotalThisMonth) }} رس</small>
+                        <small class="text-muted d-block">الشهر الماضي: {{ number_format($flightTotalLastMonth) }} رس</small>
                     </div>
                     <div class="ribbon"></div>
                 </div>
             </div>
+            {{-- بطاقة حجوزات الفنادق --}}
             <div class="col-md-3 col-6 my-4">
                 <div class="stats-card yellow">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
+                            <span class="growth-icon">
+                                <i class="fa-solid {{ $hotelGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
+                            </span>
+                            <span class="percentage">{{ number_format($hotelGrowth, 1) }}%</span>
                         </div>
                         <div class="dots">•••</div>
-
                     </div>
                     <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
+                        <h6 class="mb-2">حجوزات الفنادق</h6>
+                        <div class="amount">+ {{ number_format($hotelTotalAllTime) }} رس</div>
+                        <small class="text-muted d-block">هذا الشهر: {{ number_format($hotelTotalThisMonth) }} رس</small>
+                        <small class="text-muted d-block">الشهر الماضي: {{ number_format($hotelTotalLastMonth) }} رس</small>
                     </div>
                     <div class="ribbon"></div>
                 </div>
             </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
 
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card yellow">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
 
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card yellow">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
-
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
-
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card yellow">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
-
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 my-4">
-                <div class="stats-card">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div class="d-flex align-items-center gap-1">
-                  <span class="growth-icon"><i
-                          class="fa-solid fa-arrow-trend-up"></i></span>
-                            <span class="percentage">8%</span>
-                        </div>
-                        <div class="dots">•••</div>
-
-                    </div>
-                    <div class="mt-4 text-start">
-                        <h6 class="mb-2">إجمالي المبيعات</h6>
-                        <div class="amount">+ 3000 رس</div>
-                    </div>
-                    <div class="ribbon"></div>
-                </div>
-            </div>
         </div>
 
         <div class="container mt-5" dir="rtl">
