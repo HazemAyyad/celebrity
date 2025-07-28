@@ -101,35 +101,31 @@
 @endsection
 @push('scripts')
     <script>
-        // Bar Chart
         const ctx1 = document.getElementById("bookingsChart").getContext("2d");
 
         new Chart(ctx1, {
             type: "bar",
             data: {
-                labels: [
-                    "شهر 12", "شهر 11", "شهر 10", "شهر 9", "شهر 8", "شهر 7",
-                    "شهر 6", "شهر 5", "شهر 4", "شهر 3", "شهر 2", "شهر 1"
-                ],
+                labels: {!! json_encode($labels) !!},
                 datasets: [
                     {
                         label: "حجوزات فنادق",
                         backgroundColor: "#008066",
-                        data: [80, 90, 70, 85, 75, 100, 95, 90, 80, 60, 55, 70],
+                        data: {!! json_encode($hotelsData) !!},
                         barThickness: 14
                     },
                     {
                         label: "حجوزات طيران",
                         backgroundColor: "#757575",
-                        data: [60, 70, 60, 65, 55, 85, 80, 75, 70, 50, 45, 60],
+                        data: {!! json_encode($flightsData) !!},
                         barThickness: 14
                     },
-                    {
-                        label: "حجوزات خدمات",
-                        backgroundColor: "#c19617",
-                        data: [40, 50, 45, 55, 50, 70, 65, 60, 50, 40, 35, 45],
-                        barThickness: 14
-                    }
+                    {{--{--}}
+                    {{--    label: "حجوزات خدمات",--}}
+                    {{--    backgroundColor: "#c19617",--}}
+                    {{--    data: {!! json_encode($servicesData) !!},--}}
+                    {{--    barThickness: 14--}}
+                    {{--}--}}
                 ]
             },
             options: {
@@ -175,8 +171,8 @@
                 }
             }
         });
-
     </script>
+
 
     <script>
         // Line Chart

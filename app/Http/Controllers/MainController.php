@@ -72,10 +72,39 @@ class MainController extends Controller
         } elseif ($flightTotalThisMonth > 0) {
             $flightGrowth = 100;
         }
+        $now = Carbon::now();
+
+        $labels = [];
+        $hotelsData = [];
+        $flightsData = [];
+        $servicesData = [];
+
+        // الأشهر من 1 إلى الشهر الحالي (مثلاً: يناير إلى يوليو)
+        for ($month = 1; $month <= $now->month; $month++) {
+            $date = Carbon::create($now->year, $month, 1);
+            $start = $date->copy()->startOfMonth();
+            $end = $date->copy()->endOfMonth();
+
+            $labels[] = $date->translatedFormat('F'); // اسم الشهر مثل "مارس"
+
+            $hotelsData[] = DB::table('booking_hotels')
+                ->whereBetween('created_at', [$start, $end])
+                ->count();
+
+            $flightsData[] = DB::table('fs_bookings')
+                ->whereBetween('created_at', [$start, $end])
+                ->count();
+
+//            $servicesData[] = DB::table('service_bookings')
+//                ->whereBetween('created_at', [$start, $end])
+//                ->count();
+        }
+
 
         return view('celebrity.index', compact(
             'hotelTotalThisMonth', 'hotelTotalLastMonth', 'hotelTotalAllTime', 'hotelGrowth',
             'flightTotalThisMonth', 'flightTotalLastMonth', 'flightTotalAllTime', 'flightGrowth'
+            ,'labels','hotelsData','flightsData'
         ));
     }
 

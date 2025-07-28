@@ -8,7 +8,12 @@
             <h3 class="fw-bold">عقدي مع الشركة</h3>
         </div>
         <div class="col-md-6 col-6 text-end">
-            <h5 class="fw-bold text-danger">طلب دعم / مراجعة </h5>
+            <h5 class="fw-bold text-danger">
+                <a class="fw-bold text-danger" href="https://api.whatsapp.com/send?phone=966920029449" target="_blank">
+                    طلب دعم / مراجعة
+                </a>
+
+            </h5>
         </div>
 
         <div class="container bg-white p-4 rounded shadow-sm my-3">
