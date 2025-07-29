@@ -23,6 +23,7 @@ class MainController extends Controller
         $userId = auth('celebrity')->id();
         $userCouponCodes = Coupon::where('celebrity_id', $userId)->pluck('code');
 
+
         // التواريخ
         $startOfThisMonth = Carbon::now()->startOfMonth();
         $endOfThisMonth = Carbon::now()->endOfMonth();
@@ -66,8 +67,8 @@ class MainController extends Controller
                 $query->select(DB::raw(1))
                     ->from('payments')
                     ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
-                    ->where('payments.payable_type', 'App\\Models\\FsBooking') // غيّر حسب اسم الموديل الصحيح
-                    ->where('payments.status', 'paid');
+                    ->where('payments.payable_type', 'flight') // غيّر حسب اسم الموديل الصحيح
+                    ->where('payments.status', 'confirmed');
             })
             ->sum('price');
 
@@ -79,8 +80,8 @@ class MainController extends Controller
                 $query->select(DB::raw(1))
                     ->from('payments')
                     ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
-                    ->where('payments.payable_type', 'App\\Models\\FsBooking')
-                    ->where('payments.status', 'paid');
+                    ->where('payments.payable_type', 'flight')
+                    ->where('payments.status', 'confirmed');
             })
             ->sum('price');
 
@@ -91,8 +92,8 @@ class MainController extends Controller
                 $query->select(DB::raw(1))
                     ->from('payments')
                     ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
-                    ->where('payments.payable_type', 'App\\Models\\FsBooking')
-                    ->where('payments.status', 'paid');
+                    ->where('payments.payable_type', 'flight')
+                    ->where('payments.status', 'confirmed');
             })
             ->sum('price');
 
@@ -134,22 +135,92 @@ class MainController extends Controller
                     $query->select(DB::raw(1))
                         ->from('payments')
                         ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
-                        ->where('payments.payable_type', 'App\\Models\\FsBooking') // أو حسب اسم الموديل عندك
-                        ->where('payments.status', 'paid');
+                        ->where('payments.payable_type', 'flight') // أو حسب اسم الموديل عندك
+                        ->where('payments.status', 'confirmed');
                 })
                 ->count();
 
 
 //
         }
+        $celebrity = auth('celebrity')->user();
+        $flightProfitRatio = $celebrity->flight_profit_ratio ?? 0;
+        $hotelProfitRatio = $celebrity->hotel_profit_ratio ?? 0;
 
+// حساب الأرباح:
+        $hotelProfitThisMonth = $hotelTotalThisMonth * ($hotelProfitRatio / 100);
+        $hotelProfitLastMonth = $hotelTotalLastMonth * ($hotelProfitRatio / 100);
+        $hotelProfitAllTime = $hotelTotalAllTime * ($hotelProfitRatio / 100);
+
+        $flightProfitThisMonth = $flightTotalThisMonth * ($flightProfitRatio / 100);
+        $flightProfitLastMonth = $flightTotalLastMonth * ($flightProfitRatio / 100);
+        $flightProfitAllTime = $flightTotalAllTime * ($flightProfitRatio / 100);
+
+        $totalProfitThisMonth = $hotelProfitThisMonth + $flightProfitThisMonth;
+        $totalProfitLastMonth = $hotelProfitLastMonth + $flightProfitLastMonth;
+        $totalProfitAllTime = $hotelProfitAllTime + $flightProfitAllTime;
+
+        $monthlyProfits = [];
+        $monthlyHotelProfits = [];
+        $monthlyFlightProfits = [];
+        $monthlyLabels = [];
+
+        for ($i = 11; $i >= 0; $i--) {
+            $start = Carbon::now()->startOfMonth()->subMonths($i);
+            $end = $start->copy()->endOfMonth();
+
+            $monthLabel = $start->translatedFormat('F'); // مثل "يوليو"
+                $monthlyLabels[] = $monthLabel;
+
+            $hotelAmount = DB::table('booking_hotels')
+                ->whereIn('coupon_code', $userCouponCodes)
+                ->whereBetween('created_at', [$start, $end])
+                ->where('status', 'confirmed')
+                ->where('payment_status', 'paid')
+                ->sum('amount');
+
+            $flightAmount = DB::table('fs_bookings')
+                ->whereIn('coupon_code', $userCouponCodes)
+                ->where('status', 'ticketed')
+                ->whereBetween('created_at', [$start, $end])
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('payments')
+                        ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
+                        ->where('payments.payable_type', 'flight')
+                        ->where('payments.status', 'confirmed');
+                })
+                ->sum('price');
+
+            // الأرباح الصافية
+            $hotelProfit = $hotelAmount * ($hotelProfitRatio / 100);
+            $flightProfit = $flightAmount * ($flightProfitRatio / 100);
+
+            $monthlyHotelProfits[] = round($hotelProfit, 2);
+            $monthlyFlightProfits[] = round($flightProfit, 2);
+            $monthlyProfits[] = round($hotelProfit + $flightProfit, 2);
+        }
 
 
         return view('celebrity.index', compact(
             'hotelTotalThisMonth', 'hotelTotalLastMonth', 'hotelTotalAllTime', 'hotelGrowth',
-            'flightTotalThisMonth', 'flightTotalLastMonth', 'flightTotalAllTime', 'flightGrowth'
-            ,'labels','hotelsData','flightsData'
+            'flightTotalThisMonth', 'flightTotalLastMonth', 'flightTotalAllTime', 'flightGrowth',
+            'labels', 'hotelsData', 'flightsData',
+            // نسب الأرباح
+            'flightProfitRatio', 'hotelProfitRatio',
+
+            // أرباح الفنادق
+            'hotelProfitThisMonth', 'hotelProfitLastMonth', 'hotelProfitAllTime',
+
+            // أرباح الطيران
+            'flightProfitThisMonth', 'flightProfitLastMonth', 'flightProfitAllTime',
+
+            // مجموع الأرباح
+            'totalProfitThisMonth', 'totalProfitLastMonth', 'totalProfitAllTime'
+//  الأرباح الشهرية
+            ,'monthlyProfits','monthlyFlightProfits','monthlyHotelProfits','monthlyLabels'
         ));
+
     }
 
     public function myQuotation()

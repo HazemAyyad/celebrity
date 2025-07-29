@@ -26,9 +26,9 @@
                 <div class="stats-card">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex align-items-center gap-1">
-                            <span class="growth-icon">
-                                <i class="fa-solid {{ $flightGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
-                            </span>
+                <span class="growth-icon">
+                    <i class="fa-solid {{ $flightGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
+                </span>
                             <span class="percentage">{{ number_format($flightGrowth, 1) }}%</span>
                         </div>
                         <div class="dots">•••</div>
@@ -38,18 +38,25 @@
                         <div class="amount">+ {{ number_format($flightTotalAllTime) }} رس</div>
                         <small class="text-muted d-block">هذا الشهر: {{ number_format($flightTotalThisMonth) }} رس</small>
                         <small class="text-muted d-block">الشهر الماضي: {{ number_format($flightTotalLastMonth) }} رس</small>
+
+                        {{-- أرباح المشهور --}}
+                        <hr class="my-2">
+                        <small class="text-success d-block fw-bold">ربحك هذا الشهر: {{ number_format($flightProfitThisMonth, 2) }} رس</small>
+                        <small class="text-muted d-block">الشهر الماضي: {{ number_format($flightProfitLastMonth, 2) }} رس</small>
+                        <small class="text-muted d-block">الإجمالي: {{ number_format($flightProfitAllTime, 2) }} رس</small>
                     </div>
                     <div class="ribbon"></div>
                 </div>
             </div>
+
             {{-- بطاقة حجوزات الفنادق --}}
             <div class="col-md-3 col-6 my-4">
                 <div class="stats-card yellow">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="d-flex align-items-center gap-1">
-                            <span class="growth-icon">
-                                <i class="fa-solid {{ $hotelGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
-                            </span>
+                <span class="growth-icon">
+                    <i class="fa-solid {{ $hotelGrowth >= 0 ? 'fa-arrow-trend-up text-success' : 'fa-arrow-trend-down text-danger' }}"></i>
+                </span>
                             <span class="percentage">{{ number_format($hotelGrowth, 1) }}%</span>
                         </div>
                         <div class="dots">•••</div>
@@ -59,6 +66,51 @@
                         <div class="amount">+ {{ number_format($hotelTotalAllTime) }} رس</div>
                         <small class="text-muted d-block">هذا الشهر: {{ number_format($hotelTotalThisMonth) }} رس</small>
                         <small class="text-muted d-block">الشهر الماضي: {{ number_format($hotelTotalLastMonth) }} رس</small>
+
+                        {{-- أرباح المشهور --}}
+                        <hr class="my-2">
+                        <small class="text-success d-block fw-bold">ربحك هذا الشهر: {{ number_format($hotelProfitThisMonth, 2) }} رس</small>
+                        <small class="text-muted d-block">الشهر الماضي: {{ number_format($hotelProfitLastMonth, 2) }} رس</small>
+                        <small class="text-muted d-block">الإجمالي: {{ number_format($hotelProfitAllTime, 2) }} رس</small>
+                    </div>
+                    <div class="ribbon"></div>
+                </div>
+            </div>
+
+            {{-- نسبة أرباح المشهور --}}
+            <div class="col-md-3 col-6 my-4">
+                <div class="stats-card purple">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="growth-icon"><i class="fa-solid fa-percent text-primary"></i></span>
+                            <span class="percentage">%</span>
+                        </div>
+                        <div class="dots">•••</div>
+                    </div>
+                    <div class="mt-4 text-start">
+                        <h6 class="mb-2">نسبة أرباح المشهور</h6>
+                        <div class="amount">طيران: {{ $flightProfitRatio }}%</div>
+                        <div class="amount">فنادق: {{ $hotelProfitRatio }}%</div>
+                    </div>
+                    <div class="ribbon"></div>
+                </div>
+            </div>
+            {{-- إجمالي أرباح المشهور --}}
+            <div class="col-md-3 col-6 my-4">
+                <div class="stats-card green">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="d-flex align-items-center gap-1">
+                            <span class="growth-icon"><i class="fa-solid fa-sack-dollar text-success"></i></span>
+                            <span class="percentage">+{{ number_format($totalProfitAllTime, 0) }} رس</span>
+                        </div>
+                        <div class="dots">•••</div>
+                    </div>
+                    <div class="mt-4 text-start">
+                        <h6 class="mb-2">إجمالي أرباحك</h6>
+                        <div class="amount">+ {{ number_format($totalProfitAllTime) }} رس</div>
+
+                        <small class="text-muted d-block">هذا الشهر: {{ number_format($totalProfitThisMonth, 0) }} رس</small>
+                        <small class="text-muted d-block">الشهر الماضي: {{ number_format($totalProfitLastMonth, 0) }} رس</small>
                     </div>
                     <div class="ribbon"></div>
                 </div>
@@ -173,6 +225,12 @@
         });
     </script>
 
+    <script>
+        const hotelsData = @json($monthlyHotelProfits);
+        const flightsData = @json($monthlyFlightProfits);
+        const totalData = @json($monthlyProfits);
+        const labelData = @json($monthlyLabels);
+    </script>
 
     <script>
         // Line Chart
@@ -185,30 +243,45 @@
         new Chart(ctx2, {
             type: "line",
             data: {
-                labels: [
-                    "شهر 12", "شهر 11", "شهر 10", "شهر 9", "شهر 8", "شهر 7",
-                    "شهر 6", "شهر 5", "شهر 4", "شهر 3", "شهر 2", "شهر 1"
-                ],
-                datasets: [{
-                    label: "الأرباح",
-                    data: [60, 65, 70, 40, 95, 55, 50, 40, 75, 85, 80, 82],
-                    fill: true,
-                    backgroundColor: gradient,
-                    borderColor: "#008066",
-                    tension: 0.4,
-                    pointRadius: function(ctx) {
-                        return ctx.dataIndex === 8 ? 6 : 0;
+                labels: labelData,
+                datasets: [
+                    {
+                        label: "إجمالي الأرباح",
+                        data: totalData,
+                        fill: true,
+                        backgroundColor: 'rgba(0, 128, 102, 0.2)',
+                        borderColor: "#008066",
+                        tension: 0.4
                     },
-                    pointBackgroundColor: "#fff",
-                    pointBorderColor: "#008066",
-                    pointBorderWidth: 2
-                }]
+                    {
+                        label: "أرباح الفنادق",
+                        data: hotelsData,
+                        fill: false,
+                        borderColor: "#0080ff",
+                        backgroundColor: 'rgba(0, 128, 255, 0.2)',
+                        tension: 0.4
+                    },
+                    {
+                        label: "أرباح الطيران",
+                        data: flightsData,
+                        fill: false,
+                        borderColor: "#ffa500",
+                        backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                        tension: 0.4
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: {
+                        display: true,
+                        labels: {
+                            font: { family: "Tahoma" },
+                            color: "#000"
+                        }
+                    },
                     tooltip: {
                         rtl: true,
                         bodyAlign: "right",
@@ -225,9 +298,7 @@
                     },
                     y: {
                         beginAtZero: true,
-                        grid: {
-                            color: "#f0f0f0"
-                        },
+                        grid: { color: "#f0f0f0" },
                         ticks: {
                             font: { family: "Tahoma" },
                             color: "#000"
@@ -236,6 +307,8 @@
                 }
             }
         });
+
+
 
     </script>
     <script>
