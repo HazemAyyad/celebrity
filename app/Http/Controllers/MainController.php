@@ -32,16 +32,22 @@ class MainController extends Controller
         // الفنادق
         $hotelTotalThisMonth = DB::table('booking_hotels')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'confirmed')
+            ->where('payment_status', 'paid')
             ->whereBetween('created_at', [$startOfThisMonth, $endOfThisMonth])
             ->sum('amount');
 
         $hotelTotalLastMonth = DB::table('booking_hotels')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'confirmed')
+            ->where('payment_status', 'paid')
             ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
             ->sum('amount');
 
         $hotelTotalAllTime = DB::table('booking_hotels')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'confirmed')
+            ->where('payment_status', 'paid')
             ->sum('amount');
 
         $hotelGrowth = 0;
@@ -54,17 +60,42 @@ class MainController extends Controller
         // الطيران
         $flightTotalThisMonth = DB::table('fs_bookings')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'ticketed')
             ->whereBetween('created_at', [$startOfThisMonth, $endOfThisMonth])
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('payments')
+                    ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
+                    ->where('payments.payable_type', 'App\\Models\\FsBooking') // غيّر حسب اسم الموديل الصحيح
+                    ->where('payments.status', 'paid');
+            })
             ->sum('price');
 
         $flightTotalLastMonth = DB::table('fs_bookings')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'ticketed')
             ->whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('payments')
+                    ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
+                    ->where('payments.payable_type', 'App\\Models\\FsBooking')
+                    ->where('payments.status', 'paid');
+            })
             ->sum('price');
 
         $flightTotalAllTime = DB::table('fs_bookings')
             ->whereIn('coupon_code', $userCouponCodes)
+            ->where('status', 'ticketed')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('payments')
+                    ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
+                    ->where('payments.payable_type', 'App\\Models\\FsBooking')
+                    ->where('payments.status', 'paid');
+            })
             ->sum('price');
+
 
         $flightGrowth = 0;
         if ($flightTotalLastMonth > 0) {
@@ -88,19 +119,30 @@ class MainController extends Controller
             $labels[] = $date->translatedFormat('F'); // اسم الشهر مثل "مارس"
 
             $hotelsData[] = DB::table('booking_hotels')
+                ->where('status', 'confirmed')
+                ->where('payment_status', 'paid')
                 ->whereIn('coupon_code', $userCouponCodes)
                 ->whereBetween('created_at', [$start, $end])
                 ->count();
 
-            $flightsData[] = DB::table('fs_bookings')
+             $flightsData[] = DB::table('fs_bookings')
                 ->whereIn('coupon_code', $userCouponCodes)
+                ->where('status', 'ticketed')
+
                 ->whereBetween('created_at', [$start, $end])
+                ->whereExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('payments')
+                        ->whereColumn('payments.payable_id', 'fs_bookings.booking_number')
+                        ->where('payments.payable_type', 'App\\Models\\FsBooking') // أو حسب اسم الموديل عندك
+                        ->where('payments.status', 'paid');
+                })
                 ->count();
 
-//            $servicesData[] = DB::table('service_bookings')
-//                ->whereBetween('created_at', [$start, $end])
-//                ->count();
+
+//
         }
+
 
 
         return view('celebrity.index', compact(
